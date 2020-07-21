@@ -1,6 +1,6 @@
 # weight_tracker_app
 
-A new Flutter application.
+A new Flutter application. This application is still developing 
 
 ## Getting Started
 
