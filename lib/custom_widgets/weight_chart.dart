@@ -73,6 +73,7 @@ class _WeightChartState extends State<WeightChart> {
             fontSize: SizeConfig.textMultiplier * 1.8,
           ),
           getTitles: (value) {
+            print(data['max weight']);
             if ((value.toDouble()) == data['max weight']) {
               return '${data['max weight']} kg';
             }

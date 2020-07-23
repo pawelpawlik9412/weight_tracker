@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_tracker_app/custom_widgets/bmi_card.dart';
 import 'package:weight_tracker_app/custom_widgets/card_for_no_data.dart';
+import 'package:weight_tracker_app/custom_widgets/range_button.dart';
 import 'package:weight_tracker_app/custom_widgets/weight_card_list_view.dart';
 import 'package:weight_tracker_app/screens/settings_screen.dart';
 import 'package:weight_tracker_app/size_config.dart';
@@ -20,14 +21,6 @@ import 'package:weight_tracker_app/custom_widgets/first_weight_card.dart';
 
 class WeightScreen extends StatelessWidget {
   final limit = 5;
-
-//  bool checkLimitOfHistory(BuildContext context) {
-//    Future x = Provider.of<WeightData>(context).numberOfRecords();
-//    x.then((value) {
-//      var x = value;
-//      return x;
-//    });
-//    }
 
   @override
   Widget build(BuildContext context) {
@@ -92,25 +85,26 @@ class WeightScreen extends StatelessWidget {
                             }
                           },
                         ),
-                        FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(5.0),
-                            side: BorderSide(
-                              color: Color(0xFF313246),
-                              width: SizeConfig.widthMultiplier * 0.5,
-                            ),
-                          ),
-                          child: Text(
-                            'Last week \u2713',
-                            style: TextStyle(
-                              fontSize: SizeConfig.textMultiplier * 2.3,
-                              color: Color(0xFFBEC0CA),
-                            ),
-                          ),
-                          onPressed: () {
-                            //TODO dodaj zmiane zakresu daty.
-                          },
-                        ),
+                        RangeButton()
+//                        FlatButton(
+//                          shape: RoundedRectangleBorder(
+//                            borderRadius: new BorderRadius.circular(5.0),
+//                            side: BorderSide(
+//                              color: Color(0xFF313246),
+//                              width: SizeConfig.widthMultiplier * 0.5,
+//                            ),
+//                          ),
+//                          child: Text(
+//                            'Last week \u2713',
+//                            style: TextStyle(
+//                              fontSize: SizeConfig.textMultiplier * 2.3,
+//                              color: Color(0xFFBEC0CA),
+//                            ),
+//                          ),
+//                          onPressed: () {
+//                            //TODO dodaj zmiane zakresu daty.
+//                          },
+//                        ),
                       ],
                     ),
                   ),
@@ -289,7 +283,8 @@ class WeightScreen extends StatelessWidget {
                                   var num = snapshot.data['numberOfRows'];
                                   if (num <= limit) {
                                     return Container(
-                                      height: SizeConfig.heightMultiplier * 26.0,
+                                      height:
+                                          SizeConfig.heightMultiplier * 26.0,
                                       child: ListView.builder(
                                           itemCount: list.length,
                                           itemBuilder:
@@ -315,7 +310,8 @@ class WeightScreen extends StatelessWidget {
                                     );
                                   } else {
                                     return Container(
-                                      height: SizeConfig.heightMultiplier * 26.0,
+                                      height:
+                                          SizeConfig.heightMultiplier * 26.0,
                                       child: ListView.builder(
                                           itemCount: list.length,
                                           itemBuilder:
