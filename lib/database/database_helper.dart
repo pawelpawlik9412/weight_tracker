@@ -42,7 +42,7 @@ class DatabaseHelper {
 
   initDB() async {
     String path = await _dbPath;
-    print(path);
+//    print(path);
     return await openDatabase(path, version: 1, onOpen: (db) {
     }, onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE $weightTable ("
@@ -218,25 +218,44 @@ class DatabaseHelper {
     }
   }
 
+  Future getDataForChartLongTimeRange(int limit) async {
+    List monthList = [];
+    List yearList = [];
+    var db = await this.database;
+    var result = await db.rawQuery('SELECT $fullDate, $weight FROM $weightTable LIMIT $limit');
 
 
+    for(var x in result) {
+      var str = x[fullDate];
+      if(!monthList.contains(str.substring(5, 7))) {
+        monthList.add(str.substring(5, 7));
+      }
+      if(!yearList.contains(str.substring(0, 4))) {
+        yearList.add(str.substring(0, 4));
+      }
+    }
+    Map map = {};
 
 
+    for(var x in yearList) {
+      for(var i in monthList) {
+        var sum = 0.0;
+        var len = 0;
+        for(var z in result) {
+          if(z[fullDate].substring(5, 7) == i && z[fullDate].substring(0, 4) == x) {
+            sum = sum + z[weight];
+            len ++;
+          }
+        }
+        if(sum != 0) {
+          var mediana = sum / len;
+          map['$x-$i'] = double.parse((mediana).toStringAsFixed(1));
+        }
+      }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return map;
+  }
 
 
   Future getFirstWeightFromDatabase() async {
@@ -244,6 +263,4 @@ class DatabaseHelper {
     var result = await db.rawQuery('SELECT $weight, $fullDate FROM $weightTable WHERE $id = (SELECT MIN($id) FROM $weightTable)');
     return result[0];
   }
-
-
 }

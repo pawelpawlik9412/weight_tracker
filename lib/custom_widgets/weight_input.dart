@@ -7,7 +7,7 @@ class WeightInput extends StatefulWidget {
 
   WeightInput({@required this.formKey});
 
-  GlobalKey formKey;
+  final GlobalKey formKey;
 
 
 

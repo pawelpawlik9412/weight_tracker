@@ -86,25 +86,6 @@ class WeightScreen extends StatelessWidget {
                           },
                         ),
                         RangeButton()
-//                        FlatButton(
-//                          shape: RoundedRectangleBorder(
-//                            borderRadius: new BorderRadius.circular(5.0),
-//                            side: BorderSide(
-//                              color: Color(0xFF313246),
-//                              width: SizeConfig.widthMultiplier * 0.5,
-//                            ),
-//                          ),
-//                          child: Text(
-//                            'Last week \u2713',
-//                            style: TextStyle(
-//                              fontSize: SizeConfig.textMultiplier * 2.3,
-//                              color: Color(0xFFBEC0CA),
-//                            ),
-//                          ),
-//                          onPressed: () {
-//                            //TODO dodaj zmiane zakresu daty.
-//                          },
-//                        ),
                       ],
                     ),
                   ),
@@ -397,3 +378,24 @@ class WeightScreen extends StatelessWidget {
     );
   }
 }
+
+
+//                        FlatButton(
+//                          shape: RoundedRectangleBorder(
+//                            borderRadius: new BorderRadius.circular(5.0),
+//                            side: BorderSide(
+//                              color: Color(0xFF313246),
+//                              width: SizeConfig.widthMultiplier * 0.5,
+//                            ),
+//                          ),
+//                          child: Text(
+//                            'Last week \u2713',
+//                            style: TextStyle(
+//                              fontSize: SizeConfig.textMultiplier * 2.3,
+//                              color: Color(0xFFBEC0CA),
+//                            ),
+//                          ),
+//                          onPressed: () {
+//                            //TODO dodaj zmiane zakresu daty.
+//                          },
+//                        ),

@@ -5,8 +5,8 @@ class FirstWeightCard extends StatelessWidget {
 
   FirstWeightCard({@required this.fullDate, @required this.weight});
 
-  String fullDate;
-  String weight;
+  final String fullDate;
+  final String weight;
 
   @override
   Widget build(BuildContext context) {

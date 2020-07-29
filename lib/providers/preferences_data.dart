@@ -8,6 +8,36 @@ class PreferencesData extends ChangeNotifier {
   static final _genderPref = SharedPref(instanceName: 'gender', deflautValue: null);
   static final _targetWeightPref = SharedPref(instanceName: 'targetWeight', deflautValue: null);
   static final _heightPref = SharedPref(instanceName: 'height', deflautValue: null);
+  static final _selectedTimeRange = SharedPref(instanceName: 'timeRange', deflautValue: '7');
+
+  // Methods for timeRange preferences
+
+  Future<String> getTimeRangePreferences() async{
+    var x = await _selectedTimeRange.read();
+    return x;
+  }
+
+  void safeTimeRangePreferences(String timeRange) {
+    if(timeRange == 'Last week') {
+      _selectedTimeRange.save('7');
+    }
+    else if(timeRange == 'Last month') {
+      _selectedTimeRange.save('30');
+    }
+    else if(timeRange == 'Last 6 month') {
+      _selectedTimeRange.save('183');
+    }
+    else {
+      _selectedTimeRange.save('365');
+    }
+    notifyListeners();
+  }
+
+  void removeTimeRangePreferences() {
+    _selectedTimeRange.remove();
+    notifyListeners();
+  }
+
 
   // Methods for gender preferences.
   Future<String> getGenderPreferences() async {
@@ -22,6 +52,24 @@ class PreferencesData extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<String> getTextForTimeRangeButton() async {
+    var x = await getTimeRangePreferences();
+    if(x == '7') {
+      return 'Last week';
+    }
+    else if(x == '30') {
+      return 'Last month';
+    }
+    else if(x == '183') {
+      return 'Last 6 month';
+    }
+    else {
+      return 'Last year';
+    }
+  }
+
+
   void removeGenderPreferences() {
     _genderPref.remove();
     notifyListeners();
@@ -59,6 +107,8 @@ class PreferencesData extends ChangeNotifier {
   }
 
 
+
+  // Methods for checking preferences in SettingsScreen()
   Future<bool> checkAllPreferences() async {
     var weight = await getWeightTargetPreferences();
     var gender = await getGenderPreferences();
@@ -76,19 +126,15 @@ class PreferencesData extends ChangeNotifier {
     var height = await getHeightPreferences();
     var gender;
 
-
     if(await getGenderPreferences() == 'male') {
       gender = Gender.male;
     } else {
       gender = Gender.female;
     }
-
     Map map = {};
-
     map['target weight'] = weight;
     map['gender'] = gender;
     map['height'] = int.parse(height);
-
     return map;
   }
 }

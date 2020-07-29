@@ -5,7 +5,7 @@ class CardForNoData extends StatelessWidget {
 
   CardForNoData({@required this.label});
 
-  String label;
+  final String label;
 
   @override
   Widget build(BuildContext context) {

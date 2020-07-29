@@ -5,6 +5,7 @@ import 'package:weight_tracker_app/providers/preferences_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:weight_tracker_app/date.dart';
 import 'package:weight_tracker_app/model/weight.dart';
+import 'dart:math';
 
 
 
@@ -49,6 +50,9 @@ class WeightData extends ChangeNotifier {
       if(result > 1.0) {
         result = 1.0;
       }
+      else if (result < 0) {
+        result = 1.0;
+      }
     } catch(e) {
       print(e);
       result = null;
@@ -78,18 +82,66 @@ class WeightData extends ChangeNotifier {
 
 
 
-  Future<Map> getWeightDetailForChart(limit) async {
+  Future<Map> getWeightDetailForChart(context) async {
+    var limit = int.parse(await Provider.of<PreferencesData>(context).getTimeRangePreferences());
     Map<String, dynamic> map = {};
-    var x = _db;
-    var spots = await getFlSpot(limit);
-    var dates = await getDatesForChart(limit);
-    map['min weight'] = await x.getMinWeightFromLimit(limit);
-    map['max weight'] = await x.getMaxWeightFromLimit(limit);
-    map['fl spots'] = spots;
-    map['last fl spot'] = spots[spots.length - 1];
-    map['dates'] = dates;
+    var x = await _db;
 
-    return map;
+    if(limit == 7 || limit == 30) {
+      var spots = await getFlSpot(limit);
+      var dates = await getDatesForChart(limit);
+      var month = await getMonthForChart(limit);
+      map['min weight'] = await x.getMinWeightFromLimit(limit);
+      map['max weight'] = await x.getMaxWeightFromLimit(limit);
+      map['fl spots'] = spots;
+      map['last fl spot'] = spots[spots.length - 1];
+      map['dates'] = dates;
+      map['month'] = month;
+      map['range'] = limit;
+
+      return map;
+    }
+    else {
+
+      var data = await x.getDataForChartLongTimeRange(limit);
+      List listOfWeights;
+      List dates;
+      if(limit == 183) {
+        listOfWeights = data.values.toList().sublist(0, 7);
+        dates = data.keys.toList().sublist(0, 7);
+      } else {
+        listOfWeights = data.values.toList().sublist(0, 13);
+        dates = data.keys.toList().sublist(0, 13);
+
+      }
+      List<FlSpot> spots = [];
+      for (var i = 0; i < listOfWeights.length; i++) {
+        spots.add(FlSpot(i.toDouble(), listOfWeights[i]));
+      }
+
+      List<String> month = [];
+      for(var u in dates) {
+       month.add(Date.getShortMonthName(int.parse(u.substring(5, 7))));
+      }
+
+      List<String> monthList =  List.from(month.reversed);
+      List datesList = List.from(dates.reversed);
+
+
+      double minWeight = listOfWeights.reduce((value, element) => value < element ? value : element);
+      double maxWeight = listOfWeights.reduce((value, element) => value > element ? value : element);
+      map['min weight'] = minWeight;
+      map['max weight'] = maxWeight;
+      map['range'] = limit;
+      map['fl spots'] = spots;
+      map['last fl spot'] = spots[spots.length - 1];
+      map['dates'] = datesList;
+      map['month'] = monthList;
+
+      return map;
+
+    }
+
   }
 
   Future<List> getFlSpot(limit) async {
@@ -112,6 +164,18 @@ class WeightData extends ChangeNotifier {
       var day = y[i].toMap()['day'];
       var month = Date.getShortMonthName(y[i].toMap()['month']);
       list.add('$day $month');
+    }
+    return list;
+  }
+
+  Future<List> getMonthForChart(limit) async {
+    var x = await _db.getWeightForChar(limit);
+    var y = List.from(x.reversed);
+
+    List list = [];
+    for (var i = 0; i < y.length; i++) {
+      var month = Date.getShortMonthName(y[i].toMap()['month']);
+      list.add('$month');
     }
     return list;
   }

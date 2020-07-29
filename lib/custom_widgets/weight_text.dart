@@ -7,10 +7,10 @@ class WeightText extends StatelessWidget {
         @required this.kiloTextSize,
         @required this.textColor});
 
-  String weightLabel;
-  double weightLabelSize;
-  double kiloTextSize;
-  Color textColor;
+  final String weightLabel;
+  final double weightLabelSize;
+  final double kiloTextSize;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {

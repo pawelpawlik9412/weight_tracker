@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:weight_tracker_app/custom_widgets/card_for_no_data.dart';
+import 'package:weight_tracker_app/date.dart';
 import 'package:weight_tracker_app/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_tracker_app/providers/weight_data.dart';
@@ -28,7 +29,7 @@ class _WeightChartState extends State<WeightChart> {
                 right: SizeConfig.widthMultiplier * 4),
             child: FutureBuilder(
                 future: Provider.of<WeightData>(context, listen: false)
-                    .getWeightDetailForChart(7),
+                    .getWeightDetailForChart(context),
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     return LineChart(
@@ -73,7 +74,6 @@ class _WeightChartState extends State<WeightChart> {
             fontSize: SizeConfig.textMultiplier * 1.8,
           ),
           getTitles: (value) {
-            print(data['max weight']);
             if ((value.toDouble()) == data['max weight']) {
               return '${data['max weight']} kg';
             }
@@ -148,19 +148,18 @@ class _WeightChartState extends State<WeightChart> {
               fontWeight: FontWeight.bold,
               fontSize: SizeConfig.textMultiplier * 1.8),
           getTitles: (value) {
-            if (value.toInt() == 0) {
-              return '${data['dates'][0]}';
+            if(data['range'] == 7) {
+              return getDatesForChartWeek(value, data);
             }
-            if (value.toInt() == 2) {
-              return '${data['dates'][2]}';
+            else if(data['range'] == 30) {
+              return getDatesForChartMonth(value, data);
             }
-            if (value.toInt() == 4) {
-              return '${data['dates'][4]}';
+            else if(data['range'] == 183) {
+              return getDatesForChartSixMonth(value, data);
             }
-            if (value.toInt() == 6) {
-              return '${data['dates'][6]}';
-            }
-            else {
+            else if(data['range'] == 365) {
+              return getDatesForChardYear(value, data);
+            } else {
               return '';
             }
           },
@@ -211,4 +210,88 @@ class _WeightChartState extends State<WeightChart> {
       ],
     );
   }
+}
+
+
+String getDatesForChartMonth(double value, Map data) {
+  if (value.toInt() == 0) {
+    return '${data['dates'][0]}';
+  }
+  if (value.toInt() == 10) {
+    return '${data['dates'][10]}';
+  }
+  if (value.toInt() == 20) {
+    return '${data['dates'][20]}';
+  }
+  if (value.toInt() == 29) {
+    return '${data['dates'][29]}';
+  }
+  else {
+    return '';
+  }
+}
+
+String getDatesForChartWeek(double value, Map data) {
+  if (value.toInt() == 0) {
+    return '${data['dates'][0]}';
+  }
+  if (value.toInt() == 2) {
+    return '${data['dates'][2]}';
+  }
+  if (value.toInt() == 4) {
+    return '${data['dates'][4]}';
+  }
+  if (value.toInt() == 6) {
+    return '${data['dates'][6]}';
+  }
+  else {
+    return '';
+  }
+}
+
+String getDatesForChardYear(double value, Map data) {
+  if (value.toInt() == 0) {
+    return '${Date.getShortMonthName(int.parse(data['dates'][0].substring(5)))} ${data['dates'][0].substring(0, 4)}';
+  }
+  if (value.toInt() == 4) {
+    return '${Date.getShortMonthName(int.parse(data['dates'][4].substring(5)))} ${data['dates'][4].substring(0, 4)}';
+  }
+
+  if (value.toInt() == 8) {
+    return '${Date.getShortMonthName(int.parse(data['dates'][8].substring(5)))} ${data['dates'][8].substring(0, 4)}';
+  }
+  if (value.toInt() == 12) {
+    return '${Date.getShortMonthName(int.parse(data['dates'][12].substring(5)))} ${data['dates'][12].substring(0, 4)}';
+  }
+  else {
+    return '';
+  }
+}
+
+String getDatesForChartSixMonth(double value, Map data) {
+  if (value.toInt() == 0) {
+    return '${data['month'][0]}';
+  }
+  if (value.toInt() == 1) {
+    return '${data['month'][1]}';
+  }
+  if (value.toInt() == 2) {
+    return '${data['month'][2]}';
+  }
+  if (value.toInt() == 3) {
+    return '${data['month'][3]}';
+  }
+  if (value.toInt() == 4) {
+    return '${data['month'][4]}';
+  }
+  if (value.toInt() == 5) {
+    return '${data['month'][5]}';
+  }
+  if (value.toInt() == 6) {
+    return '${data['month'][6]}';
+  }
+  else {
+    return '';
+  }
+
 }
